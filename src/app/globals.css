@@ -13,7 +13,7 @@
       --popover: 0 0% 97%;
       --popover-foreground: 0 0% 14%;
 
-      --primary: 277 37% 49%;
+      --primary: 278 61% 57%;
       --primary-foreground: 0 0% 97%;
 
       --secondary: 0 0% 91%;
@@ -28,11 +28,11 @@
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 210 40% 98%;
 
-      --border: 276 56% 95%;
+      --border: 0 0% 91%;
       --input: 0 0% 91%;
       --ring: 277 37% 49%;
 
-      --radius: 0.5rem;
+      --radius: 1rem;
     }
 
     .dark {
