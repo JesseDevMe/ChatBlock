@@ -18,7 +18,7 @@ type Props = {};
 
 const Menu: FC<Props> = ({}) => {
   return (
-    <div className="py-5 px-6 bg-background rounded-lg shadow flex justify-between items-center gap-7">
+    <div className="py-5 pl-4 pr-6 bg-background rounded-lg shadow flex justify-between items-center gap-7">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost"><MenuIcon className="text-muted-foreground"/></Button>
