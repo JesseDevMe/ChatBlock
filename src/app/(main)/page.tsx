@@ -1,3 +1,4 @@
+import ChatsList from "@/features/chats-list/ui/chats-list";
 import Menu from "@/features/menu/ui/menu";
 
 export default async function Home() {
@@ -6,6 +7,7 @@ export default async function Home() {
     <main className="p-5 pb-0 h-screen bg-muted ">
       <div className="flex flex-col gap-y-5 w-fit h-full bg-gray-400">
         <Menu/>
+        <ChatsList/>
       </div>
       
     </main>
