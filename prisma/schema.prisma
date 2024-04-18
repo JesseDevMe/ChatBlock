@@ -13,21 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
- 
 model Account {
   userId            String
   type              String
@@ -40,33 +25,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   id                   String  @id @default(cuid())
@@ -78,6 +63,57 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+
+  Conversations Conversation[]
+  groups        Group[]
+  lastSeen      DateTime?
+  messages      Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Conversation {
+  id                 String    @id @default(cuid())
+  messages           Message[]
+  notificationEnable Boolean?   @default(true)
+  block              Boolean?   @default(false)
+  Users              User[]
+  groups             Group[]
+}
+
+model Group {
+  id            String         @id @default(cuid())
+  name          String
+  conversations Conversation[]
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id              String         @id @default(cuid())
+  text            String
+  replyMessageId  String?
+  replyMessage    Message?       @relation("Reply", fields: [replyMessageId], references: [id])
+  repliedMessages Message[]      @relation("Reply")
+  img             String?
+  date            DateTime       @default(now())
+  isSeen          Boolean        @default(false)
+  senderId        String
+  sender          User           @relation(fields: [senderId], references: [id])
+  conversation    Conversation[]
 }
