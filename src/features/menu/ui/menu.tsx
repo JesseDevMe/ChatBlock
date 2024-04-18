@@ -1,6 +1,8 @@
+import MyProfile from "@/features/profile-dialog/ui/my-profile";
 import Logo from "@/shared/ui/Logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar";
 import { Button } from "@/shared/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/shared/ui/dialog";
 import {
   Sheet,
   SheetContent,
@@ -61,10 +63,18 @@ const Menu: FC<Props> = ({}) => {
               <ul className="space-y-2.5">
                 {items.map((item, index) =>
                   <li key={item.title}>
-                    <Button variant={'ghost'} className="flex gap-2.5 items-center font-normal">
-                      {item.icon}
-                      <p>{item.title}</p>
-                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant={'ghost'} className="flex gap-2.5 items-center font-normal">
+                          {item.icon}
+                          <p>{item.title}</p>
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px] sm:rounded-bl-[50px] p-0 overflow-hidden border-none bg-transparent">
+                        <MyProfile/>
+                      </DialogContent>
+                    </Dialog>
+
                   </li>
                 )}
               </ul>
