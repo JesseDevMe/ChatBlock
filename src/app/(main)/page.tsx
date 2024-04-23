@@ -1,5 +1,6 @@
 import ChatsList from "@/features/chats-list/ui/chats-list";
 import Menu from "@/features/menu/ui/menu";
+import { SessionProvider } from "next-auth/react";
 
 export default async function Home() {
   

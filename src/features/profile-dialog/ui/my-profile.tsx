@@ -1,33 +1,45 @@
-import Image from "next/image";
-import { FC } from "react";
-import dicaprioImg from "@/../public/mock/dicaprio.jpg"
-import { Button } from "@/shared/ui/button";
+"use client";
+import { FC, useCallback, useEffect, useState } from "react";
+import getUserAction from "@/entities/user/actions/getUser";
+import { FetchStatus } from "@/shared/types";
+import { Skeleton } from "@/shared/ui/skeleton";
+import ProfileHeader from "./_profile-header";
+import ProfileInfo from "./_profile-info";
+import useProfileStore from "../store/_profile-store";
 
 type Props = {};
 
 const MyProfile: FC<Props> = ({}) => {
+  const profileStore = useProfileStore();
+
+  const getUserData = useCallback(
+    async () => {
+      const data = await getUserAction();
+
+      profileStore.setStatus(FetchStatus.DONE);
+      profileStore.setImage(data.image || "");
+      profileStore.setEmail(data.email);
+      profileStore.setName(data.name);
+      
+    },
+    [profileStore]
+  )
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
+  if (profileStore.status === FetchStatus.PENDING) {
+    return (
+      <Skeleton className="overflow-hidden max-h-[502px] h-screen w-screen sm:max-w-[425px] sm:rounded-lg sm:rounded-bl-[50px] p-0"></Skeleton>
+    );
+  }
+
   return (
-    <div>
-      <div className="relative aspect-video flex flex-col justify-end gap-2.5">
-        <Image fill className="object-cover pointer-events-none -z-10" draggable={false} src={dicaprioImg} alt="Аватарка"/>
-        <div className="p-5 text-primary-foreground">
-          <p className="text-2xl font-medium">Erick Nash</p>
-          <p className="text-xs font-light">online</p>
-        </div>
-      </div>
-      <div className="bg-background p-5">
-        <p className="font-medium">Аккаунт</p>
-        <form className="mt-5 flex flex-col">
-          <div className="border-b">
-            <p className="text-xs text-muted-foreground">Почта</p>
-            <input className="bg-transparent p-2.5 w-full" value={"voiceangel52@gmail.com"} type="email" />
-          </div>
-          <div className="border-b mt-2.5">
-            <p className="text-xs text-muted-foreground">Имя</p>
-            <input className="bg-transparent p-2.5 w-full" value={"Erick Nash"} type="email" />
-          </div>
-          <Button className="mt-5 self-end">Сохранить</Button>
-        </form>
+    <div className="overflow-hidden w-screen sm:max-w-[425px] sm:rounded-bl-[50px] sm:rounded-lg p-0">
+      <div className="overflow-auto max-h-full sm:max-h-[92vh]">
+          <ProfileHeader/>
+          <ProfileInfo />
       </div>
     </div>
     
